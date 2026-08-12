@@ -1,0 +1,1462 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0d10">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Банк">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%D0%91%D0%B0%D0%BD%D0%BA%20%D0%A2%D0%B5%D1%80%D0%BC%D1%96%D0%BD%D0%B0%D0%BB%22%2C%22short_name%22%3A%22%D0%91%D0%B0%D0%BD%D0%BA%22%2C%22display%22%3A%22fullscreen%22%2C%22start_url%22%3A%22.%22%2C%22background_color%22%3A%22%230b0d10%22%2C%22theme_color%22%3A%22%230b0d10%22%7D">
+
+<title>Термінал — макет</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0d10;font-family:Inter,Arial,sans-serif;color:#17191c;display:flex;justify-content:center;min-height:100vh}
+.terminal{width:min(100%,460px);min-height:100vh;background:#f5f6f7;padding:18px 18px 28px;box-shadow:0 0 45px rgba(0,0,0,.55)}
+.logo{font-size:27px;font-weight:850;letter-spacing:-1px;text-align:left;padding:12px 8px 22px;border-bottom:1px solid #e1e3e6;margin-bottom:26px}
+h1{font-size:27px;letter-spacing:-.6px;text-align:center;margin:16px 0 8px}.sub{text-align:center;color:#747980;margin-bottom:25px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.btn{border:1px solid #e0e2e5;border-radius:18px;padding:24px 10px;font-size:17px;font-weight:750;cursor:pointer;background:#fff;box-shadow:0 3px 10px rgba(0,0,0,.06);transition:.15s}
+.btn:hover{transform:translateY(-1px);background:#fafafa}.primary{background:#111;color:#fff;border-color:#111}.primary:hover{background:#242424}
+.back{background:transparent;border:0;font-size:16px;font-weight:650;cursor:pointer;padding:8px 0}
+.amount{font-size:42px;font-weight:850;text-align:center;margin:20px 0 25px}
+.money{display:grid;grid-template-columns:1fr 1fr;gap:11px}.money button{padding:21px;border:1px solid #dedfe2;border-radius:16px;background:#fff;font-size:23px;font-weight:800;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.05)}.money button:hover{background:#eee}
+input{width:100%;padding:18px;border:1px solid #d7d9dc;border-radius:15px;font-size:20px;margin:10px 0 15px;outline:none;background:#fff}input:focus{border:2px solid #111}
+.success{text-align:center;padding-top:50px}.check{font-size:72px;font-weight:800}.hidden{display:none}
+
+    body.dark-mode{background:#050607}
+    body.dark-mode .terminal{background:#111315;color:#f1f3f5}
+    body.dark-mode .btn:not(.primary),body.dark-mode input,body.dark-mode select,body.dark-mode #confirmCard,
+    body.dark-mode .payment-note,body.dark-mode [style*="background:#fff"]{
+      background:#1b1e22!important;color:#f1f3f5!important;border-color:#34383d!important
+    }
+    body.dark-mode .sub{color:#a5abb2}
+    body.dark-mode .logo{border-color:#34383d}
+    .theme-toggle{position:fixed;left:14px;bottom:14px;z-index:9999;border:0;border-radius:14px;
+      padding:12px 15px;background:#111;color:#fff;font-weight:700;box-shadow:0 5px 18px rgba(0,0,0,.25);cursor:pointer}
+    
+
+    .receipt-paper{background:#fff;color:#17191c;border-radius:18px;padding:22px;border:1px solid #ddd;box-shadow:0 5px 18px rgba(0,0,0,.08)}
+    .receipt-logo{text-align:center;font-size:24px;font-weight:800}
+    .receipt-ok{text-align:center;color:#299c4a;font-weight:700;margin-top:8px}
+    .receipt-paper hr{border:0;border-top:1px dashed #bbb;margin:18px 0}
+    .receipt-row{display:flex;justify-content:space-between;gap:16px;margin:10px 0}
+    .receipt-center{text-align:center;color:#777}
+    body.dark-mode .receipt-paper{background:#fff!important;color:#17191c!important}
+</style>
+</head>
+<body>
+<div class="terminal">
+  <div class="logo" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+  <div><span style="background:#111;color:#fff;padding:7px 10px;border-radius:10px">monobank</span></div>
+  <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:#39a852;letter-spacing:0">
+    <span style="font-size:38px;line-height:1">🐈</span>
+    <span>● ONLINE</span>
+  </div>
+</div>
+
+  <section id="home">
+    <div style="display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #e2e3e5;border-radius:16px;padding:13px 15px;margin-bottom:18px">
+      <span style="font-weight:700">Термінал готовий</span><span style="font-size:13px;color:#39a852">● Онлайн</span>
+    </div>
+    <h1>Оберіть операцію</h1><div class="sub">Оберіть операцію</div>
+    <div class="grid">
+      <button class="btn primary" onclick="openPage('cashin')">💵<br>Зарахувати кошти</button>
+      <button class="btn" onclick="openPage('transfer')">↗️<br>Переказати кошти</button>
+      <button class="btn" onclick="openPage('balance')">💳<br>Перевірити баланс</button>
+      <button class="btn" onclick="openPage('recount')">💵<br>Перерахувати гроші</button>
+      <button class="btn" onclick="openPage('withdraw')">💸<br>Зняти готівку</button>
+      <button class="btn" onclick="openPage('payments')">📱<br>Комуналка / мобільний</button>
+      <button class="btn" onclick="openPartPayment()">🧾<br>Оплата частинами</button>
+      <button class="btn" onclick="openMonoMarketPayment()">🛍️<br>Оплатити на Monomarket</button>
+      <button class="btn" onclick="showHelp()">❓<br>Допомога</button>
+    </div>
+  </section>
+
+  <section id="cashin" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <h1>Зарахування коштів</h1><div class="sub">Оберіть валюту та номінал купюри</div>
+    <select id="cashCurrency" onchange="changeCurrency('cash')" style="width:100%;padding:16px;border:1px solid #ddd;border-radius:15px;font-size:18px;margin-bottom:12px;background:#fff">
+      <option value="UAH">🇺🇦 Гривня (UAH)</option><option value="USD">🇺🇸 Долар (USD)</option><option value="EUR">🇪🇺 Євро (EUR)</option><option value="GBP">🇬🇧 Фунт (GBP)</option>
+    </select>
+    <div class="amount" id="cashAmount">0 ₴</div>
+    <div class="money" id="cashButtons"></div>
+    <br><button class="btn primary" style="width:100%" onclick="cardPage('cashin')">Зарахувати на картку</button>
+  </section>
+
+  <section id="transfer" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <h1>Переказ коштів</h1><div class="sub">Оберіть валюту та суму</div>
+    <select id="transferCurrency" onchange="changeCurrency('transfer')" style="width:100%;padding:16px;border:1px solid #ddd;border-radius:15px;font-size:18px;margin-bottom:12px;background:#fff">
+      <option value="UAH">🇺🇦 Гривня (UAH)</option><option value="USD">🇺🇸 Долар (USD)</option><option value="EUR">🇪🇺 Євро (EUR)</option><option value="GBP">🇬🇧 Фунт (GBP)</option>
+    </select>
+    <div class="amount" id="transferAmount">0 ₴</div>
+    <div class="money" id="transferButtons"></div>
+    <div id="transferMethodBox" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px">
+      <button class="btn" onclick="chooseTransferMethod('cash')">💵<br>Готівкою</button>
+      <button class="btn" onclick="chooseTransferMethod('card')">💳<br>Карткою</button>
+    </div>
+    <div id="transferMethodHint" class="sub" style="margin-top:10px">Оберіть спосіб оплати</div>
+  </section>
+
+  <section id="help" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <h1>Допомога</h1>
+    <div style="display:grid;gap:10px;margin-top:22px">
+      <button class="btn" onclick="alert('Оберіть потрібну операцію на головному екрані.')">Як користуватися терміналом?</button>
+      <button class="btn" onclick="alert('Якщо операцію скасовано, поверніться на головний екран.')">Як скасувати операцію?</button>
+      <button class="btn" onclick="alert('Якщо потрібна допомога, зверніться до працівника банку.')">Потрібна допомога працівника</button>
+    </div>
+  </section>
+
+  <section id="withdraw" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <h1>Зняти готівку</h1>
+    <div class="sub">Оберіть суму</div>
+    <div class="money">
+      <button onclick="withdraw(100)">100 ₴</button><button onclick="withdraw(200)">200 ₴</button>
+      <button onclick="withdraw(500)">500 ₴</button><button onclick="withdraw(1000)">1000 ₴</button>
+      <button onclick="withdraw(2000)">2000 ₴</button><button onclick="withdraw(5000)">5000 ₴</button>
+    </div>
+  </section>
+
+  <section id="withdrawCard" class="hidden">
+    <button class="back" onclick="openPage('withdraw')">← Назад</button>
+    <h1>Картка</h1><div class="sub" id="withdrawText">Введіть картку</div>
+    <input id="withdrawCardInput" type="password" maxlength="19" placeholder="0000 0000 0000 0000" inputmode="numeric" autocomplete="off" oninput="formatSimpleCard(this)">
+    <button class="btn primary" style="width:100%" onclick="finishWithdraw()">Підтвердити</button>
+  </section>
+
+  <section id="payments" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <h1>Платежі</h1><div class="sub">Оберіть послугу</div>
+    <div class="grid">
+      <button class="btn" onclick="paymentType('Комунальні послуги')">🏠<br>Комуналка</button>
+      <button class="btn" onclick="paymentType('Мобільний телефон')">📱<br>Мобільний</button>
+    </div>
+  </section>
+
+  <section id="paymentForm" class="hidden">
+    <button class="back" onclick="openPage('payments')">← Назад</button>
+    <h1 id="paymentTitle">Платіж</h1>
+    <div class="sub">Оберіть спосіб оплати</div>
+    <div class="grid">
+      <button class="btn" onclick="choosePaymentMethod('card')">💳<br>Оплатити карткою</button>
+      <button class="btn" onclick="choosePaymentMethod('cash')">💵<br>Оплатити готівкою</button>
+    </div>
+  </section>
+
+  <section id="paymentDetails" class="hidden">
+    <button class="back" onclick="openPage('paymentForm')">← Назад</button>
+    <h1 id="paymentDetailsTitle">Платіж</h1>
+    <div class="sub" id="paymentMethodText">Введіть дані для оплати</div>
+    <input id="paymentFullName" placeholder="Ім’я, прізвище та по батькові">
+    <input id="paymentId" placeholder="Номер телефону або особовий рахунок" inputmode="tel">
+    <input id="paymentSum" type="number" min="1" placeholder="Сума, ₴">
+    <div id="paymentCardBox" class="hidden">
+      <input id="paymentCard" type="password" maxlength="19" placeholder="0000 0000 0000 0000" inputmode="numeric" autocomplete="off" oninput="formatSimpleCard(this)">
+    </div>
+    <button class="btn primary" style="width:100%" onclick="finishPayment()">Оплатити</button>
+  </section>
+
+    <section id="customPayment" class="hidden">
+      <button class="back" onclick="openPage('home')">← Назад</button>
+      <h1 id="customPaymentTitle">Оплата</h1>
+      <div class="sub" id="customPaymentSub">Введіть дані для оплати</div>
+
+      <div id="monoProductBox" class="hidden">
+        <input id="monoProduct" placeholder="Назва предмета / товару">
+        <input id="monoOrder" placeholder="Номер замовлення" inputmode="numeric">
+      </div>
+
+      <div id="installmentTotalBox" class="hidden">
+        <input id="installmentTotal" type="number" min="1" step="1" placeholder="Повна сума покупки, ₴">
+        <select id="installmentCount" style="width:100%;padding:16px;border:1px solid #ddd;border-radius:15px;font-size:18px;margin-bottom:12px;background:#fff">
+          <option value="3">3 платежі</option>
+          <option value="6">6 платежів</option>
+          <option value="9">9 платежів</option>
+          <option value="12">12 платежів</option>
+        </select>
+      </div>
+
+      <input id="customPhone" type="tel" maxlength="17" placeholder="Номер телефону (+380...)" inputmode="tel">
+      <input id="customCard" type="text" maxlength="19" placeholder="Номер картки 0000 0000 0000 0000" inputmode="numeric" autocomplete="off" oninput="formatSimpleCard(this)">
+      <input id="customAmount" type="number" min="1" step="1" placeholder="Сума платежу, ₴">
+
+      <div id="customPaymentNote" class="payment-note" style="background:#fff;border:1px solid #ddd;border-radius:15px;padding:14px;margin:5px 0 15px;color:#666;font-size:14px">
+        Введіть дані та перевірте їх перед оплатою. Для оплати частинами та Monomarket після підтвердження потрібен PIN-код.
+      </div>
+      <button class="btn primary" style="width:100%" onclick="finishCustomPayment()">Продовжити</button>
+    </section>
+
+    <section id="paymentConfirm" class="hidden">
+    <button class="back" onclick="cancelPaymentConfirmation()">← Назад</button>
+    <h1>Підтвердження оплати</h1>
+    <div class="sub">Перевірте дані перед підтвердженням</div>
+    <div id="confirmCard" class="payment-note" style="background:#fff;border:1px solid #ddd;border-radius:18px;padding:20px;margin:20px 0;color:#17191c">
+      <div style="display:flex;justify-content:space-between;padding:10px 0"><span>Операція</span><b id="confirmOperation"></b></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0"><span>Телефон</span><b id="confirmPhone"></b></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0"><span>Картка</span><b id="confirmCardNumber"></b></div>
+      <div id="confirmExtra" style="border-top:1px dashed #ccc;margin-top:6px"></div>
+      <hr style="border:0;border-top:1px dashed #ccc;margin:10px 0">
+      <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:20px"><span>До оплати</span><b id="confirmAmount"></b></div>
+    </div>
+    <div style="display:grid;gap:10px">
+      <button class="btn primary" style="width:100%" onclick="confirmCustomPayment()">✓ Підтвердити оплату</button>
+      <button class="btn" style="width:100%" onclick="cancelPaymentConfirmation()">Скасувати</button>
+    </div>
+  </section>
+
+<section id="operationSuccess" class="hidden">
+    <div class="check">✓</div>
+    <h1>Операцію завершено</h1>
+    <div class="sub" id="operationText"></div>
+    <div style="display:grid;gap:10px;margin-top:22px">
+      <button class="btn primary" style="width:100%" onclick="showOperationReceipt()">🧾 Надрукувати чек</button>
+      <button class="btn" style="width:100%" onclick="openPage('home')">На головний екран</button>
+    </div>
+  </section>
+
+  <section id="operationReceipt" class="hidden">
+    <button class="back" onclick="openPage('operationSuccess')">← Назад</button>
+    <h1>Чек</h1>
+    <div style="background:#fff;border-radius:18px;padding:22px;margin-top:20px;border:1px solid #ddd;box-shadow:0 5px 18px rgba(0,0,0,.06);color:#17191c">
+      <div style="text-align:center;font-size:22px;font-weight:800">monobank</div>
+      <div style="text-align:center;color:#39a852;margin-top:6px">✓ ОПЕРАЦІЮ УСПІШНО ВИКОНАНО</div>
+      <hr style="border:0;border-top:1px dashed #ccc;margin:18px 0">
+      <div id="operationReceiptBody"></div>
+      <hr style="border:0;border-top:1px dashed #ccc;margin:18px 0">
+      <div style="display:flex;justify-content:space-between"><span>Дата</span><b id="operationReceiptDate"></b></div>
+      <div style="display:flex;justify-content:space-between;margin-top:12px"><span>Термінал</span><b>№ 000128</b></div>
+      <div style="text-align:center;color:#777;margin-top:18px">Дякуємо за користування терміналом!</div>
+    </div>
+    <br>
+    <button class="btn primary" style="width:100%" onclick="openPage('home')">Готово</button>
+  </section>
+
+
+  <section id="pin" class="hidden">
+    <button class="back" onclick="openPage(lastOperation)">← Назад</button>
+    <h1>Підтвердження</h1>
+    <div class="sub">Введіть PIN-код для підтвердження операції</div>
+    <input id="pinInput" type="password" maxlength="4" inputmode="numeric" placeholder="••••"
+           style="text-align:center;letter-spacing:12px;font-size:28px">
+    <button class="btn primary" style="width:100%" onclick="finishPin()">Підтвердити</button>
+  </section>
+
+  <section id="balance" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <h1>Перевірка балансу</h1>
+    <div class="sub">Введіть номер картки</div>
+    <div style="position:relative">
+      <input id="balanceCard" type="password" maxlength="19" placeholder="0000 0000 0000 0000" inputmode="numeric" autocomplete="off" oninput="formatBalanceCard(this)" style="padding-right:105px">
+      <button onclick="toggleBalanceCard()" id="showBalanceBtn" style="position:absolute;right:9px;top:18px;border:0;background:#eee;border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer">Показати</button>
+    </div>
+    <div class="money" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
+      <button onclick="balanceKey('1')">1</button><button onclick="balanceKey('2')">2</button><button onclick="balanceKey('3')">3</button>
+      <button onclick="balanceKey('4')">4</button><button onclick="balanceKey('5')">5</button><button onclick="balanceKey('6')">6</button>
+      <button onclick="balanceKey('7')">7</button><button onclick="balanceKey('8')">8</button><button onclick="balanceKey('9')">9</button>
+      <button onclick="balanceKey('0')">0</button><button onclick="balanceBackspace()">⌫</button>
+    </div>
+    <button class="btn primary" style="width:100%" onclick="showBalance()">Перевірити</button>
+  </section>
+
+  <section id="balanceResult" class="hidden">
+    <button class="back" onclick="openPage('home')">← На головний екран</button>
+    <h1>Ваш баланс</h1>
+    <div style="display:grid;gap:12px;margin-top:25px">
+      <div style="background:#111;color:#fff;border-radius:18px;padding:20px">
+        <div style="opacity:.7">🇺🇦 Гривня</div><div style="font-size:32px;font-weight:800;margin-top:7px">12 450,00 ₴</div>
+      </div>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:18px;padding:18px">
+        🇺🇸 <b>USD</b><span style="float:right;font-weight:800">320,00 $</span>
+      </div>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:18px;padding:18px">
+        🇪🇺 <b>EUR</b><span style="float:right;font-weight:800">180,00 €</span>
+      </div>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:18px;padding:18px">
+        🇬🇧 <b>GBP</b><span style="float:right;font-weight:800">75,00 £</span>
+      </div>
+    </div>
+    <br><button class="btn primary" style="width:100%" onclick="openPage('home')">Готово</button>
+  </section>
+
+  <section id="receipt" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <h1>Чек</h1>
+    <div style="background:#fff;border-radius:18px;padding:22px;margin-top:20px;border:1px solid #ddd;box-shadow:0 5px 18px rgba(0,0,0,.06)">
+      <div style="text-align:center;font-size:22px;font-weight:800">БАНК</div>
+      <hr style="border:0;border-top:1px dashed #ccc;margin:18px 0">
+      <div style="display:flex;justify-content:space-between"><span>Статус</span><b>Успішно</b></div>
+      <div style="display:flex;justify-content:space-between;margin-top:12px"><span>Термінал</span><b>№ 000128</b></div>
+      <div style="display:flex;justify-content:space-between;margin-top:12px"><span>Дата</span><b id="receiptDate"></b></div>
+      <hr style="border:0;border-top:1px dashed #ccc;margin:18px 0">
+      <div style="text-align:center;color:#777">Дякуємо за користування терміналом!</div>
+    </div>
+    <br><button class="btn primary" style="width:100%" onclick="openPage('home')">Готово</button>
+  </section>
+
+  <section id="recount" class="hidden">
+    <button class="back" onclick="openPage('home')">← Назад</button>
+    <div class="success">
+      <div style="font-size:55px">💵</div>
+      <h1>Перерахувати гроші</h1>
+      <div class="sub">Всуньте купюри</div>
+      <div style="margin:22px auto;max-width:320px;background:#fff;border:1px dashed #bbb;border-radius:16px;padding:20px;font-size:16px">
+        💡 <b>Підказка</b><br><span style="color:#777">Вставляйте купюри по одній. Термінал перерахує їх автоматично.</span>
+      </div>
+      <button class="btn" style="width:100%" onclick="openPage('home')">Скасувати</button>
+    </div>
+  </section>
+
+  <section id="card" class="hidden">
+    <button class="back" onclick="openPage(lastOperation)">← Назад</button>
+    <h1>Картка отримувача</h1><div class="sub">Введіть номер картки</div>
+    <div style="position:relative">
+      <input id="cardNumber" type="password" maxlength="19" placeholder="•••• •••• •••• ••••" inputmode="numeric" autocomplete="off" oninput="formatCard(this)" style="padding-right:105px">
+      <button onclick="toggleCard()" style="position:absolute;right:9px;top:18px;border:0;background:#eee;border-radius:10px;padding:8px 10px;font-weight:700;cursor:pointer" id="showCardBtn">Показати</button>
+    </div>
+    <div class="money" style="grid-template-columns:repeat(3,1fr);margin-bottom:14px">
+      <button onclick="key('1')">1</button><button onclick="key('2')">2</button><button onclick="key('3')">3</button>
+      <button onclick="key('4')">4</button><button onclick="key('5')">5</button><button onclick="key('6')">6</button>
+      <button onclick="key('7')">7</button><button onclick="key('8')">8</button><button onclick="key('9')">9</button>
+      <button onclick="key('0')">0</button><button onclick="backspace()">⌫</button>
+    </div>
+    <button class="btn primary" style="width:100%" onclick="finish()">Продовжити</button>
+    <button class="btn" style="width:100%;margin-top:10px" onclick="cancelCard()">Скасувати операцію</button>
+  </section>
+
+  <section id="success" class="hidden success">
+    <div class="check">✓</div><h1>Операцію завершено</h1>
+    <div class="sub" id="resultText"></div>
+    <div style="display:grid;gap:10px;margin-top:22px">
+      <button class="btn primary" style="width:100%" onclick="showOperationReceipt()">🧾 Надрукувати чек</button>
+      <button class="btn" style="width:100%" onclick="openPage('home')">На головний екран</button>
+    </div>
+  </section>
+</div>
+<script>
+let cash=0, transfer=0, lastOperation='home';
+let cashCurrency='UAH', transferCurrency='UAH';
+const symbols={UAH:'₴',USD:'$',EUR:'€',GBP:'£'};
+const names={UAH:'грн',USD:'USD',EUR:'EUR',GBP:'GBP'};
+const denominations={
+ UAH:[20,50,100,200,500,1000],
+ USD:[1,5,10,20,50,100,200],
+ EUR:[1,5,10,20,50,100,200],
+ GBP:[1,5,10,20,50,100,200]
+};
+function renderMoneyButtons(type){
+ const cur=type==='cash'?cashCurrency:transferCurrency;
+ const target=document.getElementById(type==='cash'?'cashButtons':'transferButtons');
+ target.innerHTML=denominations[cur].map(n=>`<button onclick="${type==='cash'?'addMoney':'setTransfer'}(${n})">${symbols[cur]} ${n}</button>`).join('');
+}
+renderMoneyButtons('cash');renderMoneyButtons('transfer');
+function hideAll(){document.querySelectorAll('section').forEach(x=>x.classList.add('hidden'))}
+function openPage(id){
+  if(id!=='card'){const el=document.getElementById('cardNumber');if(el)el.value=''}
+  if(id==='cashin'){cash=0;document.getElementById('cashAmount').textContent=symbols[cashCurrency]+' 0'}
+  if(id==='transfer'){transfer=0;document.getElementById('transferAmount').textContent=symbols[transferCurrency]+' 0'}
+  hideAll();document.getElementById(id).classList.remove('hidden')
+}
+function addMoney(n){
+ cash+=n;
+ document.getElementById('cashAmount').textContent=symbols[cashCurrency]+' '+cash;
+}
+function setTransfer(n){
+ transfer+=n;
+ document.getElementById('transferAmount').textContent=symbols[transferCurrency]+' '+transfer;
+}
+function changeCurrency(type){
+ if(type==='cash'){
+  cashCurrency=document.getElementById('cashCurrency').value;cash=0;
+  document.getElementById('cashAmount').textContent=symbols[cashCurrency]+' 0';
+  renderMoneyButtons('cash');
+ } else {
+  transferCurrency=document.getElementById('transferCurrency').value;transfer=0;
+  document.getElementById('transferAmount').textContent=symbols[transferCurrency]+' 0';
+  renderMoneyButtons('transfer');
+ }
+}
+function cardPage(op){lastOperation=op;if(op==='cashin'&&cash===0)return alert('Спочатку оберіть суму.');if(op==='transfer'&&transfer===0)return alert('Спочатку оберіть суму.');openPage('card')}
+function formatCard(el){let v=el.value.replace(/\D/g,'').slice(0,16);el.value=v.replace(/(\d{4})(?=\d)/g,'$1 ')}
+function key(n){
+ const el=document.getElementById('cardNumber');
+ const digits=el.value.replace(/\D/g,'');
+ if(digits.length<16){el.value=digits+n;formatCard(el)}
+}
+function backspace(){
+ const el=document.getElementById('cardNumber');
+ el.value=el.value.replace(/\D/g,'').slice(0,-1);formatCard(el)
+}
+function toggleCard(){
+ const el=document.getElementById('cardNumber');
+ const btn=document.getElementById('showCardBtn');
+ if(el.type==='password'){el.type='text';btn.textContent='Приховати'}
+ else{el.type='password';btn.textContent='Показати'}
+}
+function cancelCard(){
+ const el=document.getElementById('cardNumber'); if(el)el.value='';
+ openPage('home');
+}
+function showHelp(){openPage('help')}
+let withdrawAmount=0, currentPayment='', paymentMethod='';
+function withdraw(n){withdrawAmount=n;document.getElementById('withdrawText').textContent='Зняття '+n+' ₴ — введіть картку';openPage('withdrawCard')}
+function formatSimpleCard(el){let v=el.value.replace(/\D/g,'').slice(0,16);el.value=v.replace(/(\d{4})(?=\d)/g,'$1 ')}
+function finishWithdraw(){
+ const el=document.getElementById('withdrawCardInput'),n=el.value.replace(/\s/g,'');
+ if(n.length!==16)return alert('Введіть 16 цифр картки.');
+ lastReceiptDetails='Зняття готівки';document.getElementById('operationText').textContent='Видано готівку: '+withdrawAmount+' ₴. Картка **** '+n.slice(-4);
+ el.value='';openPage('operationSuccess');
+}
+function finishRefund(){
+ const amount=document.getElementById('refundAmount').value;
+ const el=document.getElementById('refundCard'),n=el.value.replace(/\s/g,'');
+ if(!amount || Number(amount)<=0)return alert('Введіть суму.');
+ if(n.length!==16)return alert('Введіть 16 цифр картки.');
+ lastReceiptDetails='Повернення коштів';document.getElementById('operationText').textContent='Повернення '+amount+' ₴ на картку **** '+n.slice(-4);
+ document.getElementById('refundAmount').value='';el.value='';openPage('operationSuccess');
+}
+function paymentType(type){
+ currentPayment=type;
+ document.getElementById('paymentTitle').textContent=type;
+ openPage('paymentForm')
+}
+function choosePaymentMethod(method){
+ paymentMethod=method;
+ document.getElementById('paymentDetailsTitle').textContent=currentPayment;
+ document.getElementById('paymentMethodText').textContent=method==='card'?'Введіть картку та дані платежу':'Введіть дані платежу та підготуйте готівку';
+ document.getElementById('paymentCardBox').classList.toggle('hidden',method!=='card');
+ openPage('paymentDetails')
+}
+
+function openPartPayment(){
+  document.getElementById('customPaymentTitle').textContent='Оплата частинами';
+  document.getElementById('customPaymentSub').textContent='Оформлення чергового платежу за покупкою';
+  document.getElementById('customPaymentNote').textContent='Вкажіть повну суму покупки, кількість платежів і суму, яку сплачуєте зараз.';
+  document.getElementById('monoProductBox').classList.add('hidden');
+  document.getElementById('installmentTotalBox').classList.remove('hidden');
+  document.getElementById('customAmount').placeholder='Сума цього платежу, ₴';
+  clearCustomPayment();
+  openPage('customPayment');
+}
+
+function openMonoMarketPayment(){
+  document.getElementById('customPaymentTitle').textContent='Оплатити на Monomarket';
+  document.getElementById('customPaymentSub').textContent='Оплата товару або замовлення';
+  document.getElementById('customPaymentNote').textContent='Введіть товар, номер замовлення, телефон, картку та суму.';
+  document.getElementById('monoProductBox').classList.remove('hidden');
+  document.getElementById('installmentTotalBox').classList.add('hidden');
+  document.getElementById('customAmount').placeholder='Сума товару, ₴';
+  clearCustomPayment();
+  openPage('customPayment');
+}
+
+function clearCustomPayment(){
+  ['customPhone','customCard','customAmount','monoProduct','monoOrder','installmentTotal'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  const c=document.getElementById('installmentCount'); if(c)c.value='3';
+}
+
+let pendingCustomPayment=null;
+
+function finishCustomPayment(){
+  const phone=document.getElementById('customPhone').value.trim();
+  const card=document.getElementById('customCard').value.replace(/\s/g,'');
+  const amount=Number(document.getElementById('customAmount').value);
+  const title=document.getElementById('customPaymentTitle').textContent;
+  const isInstallment=title==='Оплата частинами';
+  const isMono=title==='Оплатити на Monomarket';
+
+  if(!phone || !amount || amount<=0) return alert('Введіть номер телефону та правильну суму.');
+  if(!/^\+?[\d\s()-]{10,17}$/.test(phone)) return alert('Введіть правильний номер телефону.');
+  if(card.length!==16) return alert('Введіть 16 цифр картки.');
+
+  let product='', order='', total='', count='';
+  if(isInstallment){
+    total=Number(document.getElementById('installmentTotal').value);
+    count=document.getElementById('installmentCount').value;
+    if(!total || total<=0) return alert('Введіть повну суму покупки.');
+    if(amount>total) return alert('Сума платежу не може бути більшою за повну суму покупки.');
+  }
+  if(isMono){
+    product=document.getElementById('monoProduct').value.trim();
+    order=document.getElementById('monoOrder').value.trim();
+    if(!product) return alert('Введіть назву товару.');
+    if(!order) return alert('Введіть номер замовлення.');
+  }
+
+  pendingCustomPayment={phone,card,amount,title,product,order,total,count,isInstallment,isMono};
+
+  document.getElementById('confirmOperation').textContent=title;
+  document.getElementById('confirmPhone').textContent=phone;
+  document.getElementById('confirmCardNumber').textContent='**** '+card.slice(-4);
+  document.getElementById('confirmAmount').textContent=amount.toLocaleString('uk-UA')+' ₴';
+
+  const extra=document.getElementById('confirmExtra');
+  if(extra){
+    extra.innerHTML=isInstallment
+      ? '<div style="display:flex;justify-content:space-between;padding:8px 0"><span>Повна сума</span><b>'+total.toLocaleString('uk-UA')+' ₴</b></div><div style="display:flex;justify-content:space-between;padding:8px 0"><span>Кількість платежів</span><b>'+count+'</b></div>'
+      : '<div style="display:flex;justify-content:space-between;padding:8px 0"><span>Товар</span><b>'+escapeReceipt(product)+'</b></div><div style="display:flex;justify-content:space-between;padding:8px 0"><span>Замовлення</span><b>№ '+escapeReceipt(order)+'</b></div>';
+  }
+  openPage('paymentConfirm');
+}
+
+function confirmCustomPayment(){
+  if(!pendingCustomPayment)return;
+  const p=pendingCustomPayment;
+  lastReceiptDetails=p.title;
+  let details=p.title+': '+p.amount.toLocaleString('uk-UA')+' ₴. Телефон '+p.phone+'. Картка **** '+p.card.slice(-4)+'.';
+  if(p.isInstallment) details+=' Платіж '+p.amount.toLocaleString('uk-UA')+' ₴ із '+p.total.toLocaleString('uk-UA')+' ₴, '+p.count+' платежів.';
+  if(p.isMono) details+=' Товар: '+p.product+'. Замовлення № '+p.order+'.';
+  document.getElementById('operationText').textContent=details;
+  pendingCustomPayment=null;
+  clearCustomPayment();
+  openPage('operationSuccess');
+}
+
+function finishPayment(){
+ const id=document.getElementById('paymentId').value.trim(),amount=document.getElementById('paymentSum').value;
+ if(!id || !amount || Number(amount)<=0)return alert('Заповніть усі поля.');
+ if(paymentMethod==='card'){
+   const n=document.getElementById('paymentCard').value.replace(/\s/g,'');
+   if(n.length!==16)return alert('Введіть 16 цифр картки.');
+ }
+ lastReceiptDetails=currentPayment;document.getElementById('operationText').textContent='Платіж: '+currentPayment+'. Сума '+amount+' ₴. Оплата '+(paymentMethod==='card'?'карткою':'готівкою')+'.';
+ document.getElementById('paymentId').value='';
+ document.getElementById('paymentSum').value='';
+ const pc=document.getElementById('paymentCard');if(pc)pc.value='';
+ openPage('operationSuccess');
+}
+function formatBalanceCard(el){let v=el.value.replace(/\D/g,'').slice(0,16);el.value=v.replace(/(\d{4})(?=\d)/g,'$1 ')}
+function balanceKey(n){
+ const el=document.getElementById('balanceCard');
+ const digits=el.value.replace(/\D/g,'');
+ if(digits.length<16){el.value=digits+n;formatBalanceCard(el)}
+}
+function balanceBackspace(){
+ const el=document.getElementById('balanceCard');
+ el.value=el.value.replace(/\D/g,'').slice(0,-1);formatBalanceCard(el)
+}
+function toggleBalanceCard(){
+ const el=document.getElementById('balanceCard'),btn=document.getElementById('showBalanceBtn');
+ if(el.type==='password'){el.type='text';btn.textContent='Приховати'}else{el.type='password';btn.textContent='Показати'}
+}
+function showBalance(){
+ const n=document.getElementById('balanceCard').value.replace(/\s/g,'');
+ if(n.length!==16)return alert('Введіть 16 цифр картки.');
+ document.getElementById('balanceCard').value='';
+ openPage('balanceResult');
+}
+function showReceipt(){
+ document.getElementById('receiptDate').textContent=new Date().toLocaleString('uk-UA');
+ openPage('receipt')
+}
+function finish(){
+ const n=document.getElementById('cardNumber').value.replace(/\s/g,'');
+ if(n.length!==16)return alert('Введіть 16 цифр вигаданого номера картки.');
+ const amount=lastOperation==='cashin'?cash:transfer;
+ const cur=lastOperation==='cashin'?cashCurrency:transferCurrency;
+ document.getElementById('resultText').textContent=(lastOperation==='cashin'?'Зараховано ':'Переказано ')+symbols[cur]+' '+amount+' ('+cur+') на картку **** '+n.slice(-4);
+ document.getElementById('cardNumber').value='';
+ openPage('success');cash=0;transfer=0;
+ document.getElementById('cashAmount').textContent=symbols[cashCurrency]+' 0';
+ document.getElementById('transferAmount').textContent=symbols[transferCurrency]+' 0';
+}
+</script>
+
+<script>
+let lastReceiptDetails='';
+
+function toggleTheme(){
+  document.body.classList.toggle('dark-mode');
+  const dark=document.body.classList.contains('dark-mode');
+  document.getElementById('themeBtn').textContent=dark?'☀️ Світла тема':'🌙 Темна тема';
+  localStorage.setItem('terminalTheme',dark?'dark':'light');
+}
+
+(function(){
+  if(localStorage.getItem('terminalTheme')==='dark'){
+    document.body.classList.add('dark-mode');
+    const b=document.getElementById('themeBtn');
+    if(b)b.textContent='☀️ Світла тема';
+  }
+})();
+
+function showOperationReceipt(){
+  document.getElementById('operationReceiptBody').innerHTML =
+    '<div style="display:flex;justify-content:space-between"><span>Операція</span><b>'+escapeReceipt(lastReceiptDetails)+'</b></div>' +
+    '<div style="margin-top:12px;font-size:16px">'+escapeReceipt(document.getElementById('operationText').textContent)+'</div>';
+  document.getElementById('operationReceiptDate').textContent=new Date().toLocaleString('uk-UA');
+  openPage('operationReceipt');
+}
+
+function escapeReceipt(s){
+  return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+
+function finishPin(){
+  const p=document.getElementById('pinInput').value.replace(/\D/g,'');
+  if(p.length!==4)return alert('Введіть 4 цифри PIN-коду.');
+  const n=document.getElementById('cardNumber').value.replace(/\s/g,'');
+  const amount=transfer;
+  const cur=transferCurrency;
+  lastReceiptDetails='Переказ коштів';
+  document.getElementById('resultText').textContent='Переказано '+symbols[cur]+' '+amount+' ('+cur+') на картку **** '+n.slice(-4);
+  document.getElementById('cardNumber').value='';
+  document.getElementById('pinInput').value='';
+  openPage('success');cash=0;transfer=0;
+}
+</script>
+<button id="themeBtn" class="theme-toggle" onclick="toggleTheme()">🌙 Темна тема</button>
+<button id="fullscreenBtn" onclick="enterKiosk()" style="position:fixed;right:14px;bottom:14px;z-index:9999;border:0;border-radius:14px;padding:12px 15px;background:#111;color:#fff;font-weight:700;box-shadow:0 5px 18px rgba(0,0,0,.25)">⛶ На весь екран</button>
+<script>
+function enterKiosk(){
+  const el=document.documentElement;
+  if(el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  document.getElementById('fullscreenBtn').style.display='none';
+}
+document.addEventListener('fullscreenchange',()=>{
+  const b=document.getElementById('fullscreenBtn');
+  if(b) b.style.display=document.fullscreenElement?'none':'block';
+});
+</script>
+
+
+
+
+<script>
+/* === FINAL PAYMENT FLOW === */
+var finalPendingPayment = null;
+var finalReceipt = {title:'Операція', amount:0, details:[]};
+
+function finalEsc(value){
+  return String(value == null ? '' : value).replace(/[&<>"']/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];
+  });
+}
+
+function finalShowConfirm(data){
+  finalPendingPayment = data;
+
+  var rows = '';
+  for(var i=0;i<data.details.length;i++){
+    rows += '<div style="display:flex;justify-content:space-between;gap:14px;padding:9px 0">'+
+            '<span>'+finalEsc(data.details[i][0])+'</span>'+
+            '<b style="text-align:right">'+finalEsc(data.details[i][1])+'</b></div>';
+  }
+
+  var rowsEl=document.getElementById('confirmRows');
+  if(rowsEl) rowsEl.innerHTML=rows;
+
+  var op=document.getElementById('confirmOperation');
+  var phone=document.getElementById('confirmPhone');
+  var card=document.getElementById('confirmCardNumber');
+  var amount=document.getElementById('confirmAmount');
+  var extra=document.getElementById('confirmExtra');
+
+  if(op) op.textContent=data.title;
+  if(phone) phone.textContent=data.phone || '—';
+  if(card) card.textContent=data.cardLast4 ? '**** '+data.cardLast4 : '—';
+  if(amount) amount.textContent=Number(data.amount).toLocaleString('uk-UA')+' ₴';
+
+  if(extra){
+    var extras='';
+    if(data.product) extras += '<div style="display:flex;justify-content:space-between;padding:8px 0"><span>Товар</span><b>'+finalEsc(data.product)+'</b></div>';
+    if(data.order) extras += '<div style="display:flex;justify-content:space-between;padding:8px 0"><span>Замовлення</span><b>№ '+finalEsc(data.order)+'</b></div>';
+    if(data.total) extras += '<div style="display:flex;justify-content:space-between;padding:8px 0"><span>Повна сума</span><b>'+Number(data.total).toLocaleString('uk-UA')+' ₴</b></div>';
+    if(data.count) extras += '<div style="display:flex;justify-content:space-between;padding:8px 0"><span>Кількість платежів</span><b>'+finalEsc(data.count)+'</b></div>';
+    extra.innerHTML=extras;
+  }
+
+  openPage('paymentConfirm');
+}
+
+function finishCustomPayment(){
+  var phoneEl=document.getElementById('customPhone');
+  var cardEl=document.getElementById('customCard');
+  var amountEl=document.getElementById('customAmount');
+  var titleEl=document.getElementById('customPaymentTitle');
+
+  if(!phoneEl || !cardEl || !amountEl || !titleEl){
+    alert('Форма оплати не знайдена.');
+    return;
+  }
+
+  var phone=phoneEl.value.trim();
+  var card=cardEl.value.replace(/\s/g,'');
+  var amount=Number(amountEl.value);
+  var title=titleEl.textContent.trim();
+  var isInstallment=(title==='Оплата частинами');
+  var isMono=(title==='Оплатити на Monomarket');
+
+  if(!phone) return alert('Введіть номер телефону.');
+  if(!/^\+?[\d\s()\-]{10,17}$/.test(phone)) return alert('Введіть правильний номер телефону.');
+  if(card.length!==16) return alert('Введіть 16 цифр картки.');
+  if(!amount || amount<=0) return alert('Введіть правильну суму.');
+
+  var product='';
+  var order='';
+  var total=0;
+  var count='';
+
+  if(isInstallment){
+    var totalEl=document.getElementById('installmentTotal');
+    var countEl=document.getElementById('installmentCount');
+    total=Number(totalEl ? totalEl.value : 0);
+    count=countEl ? countEl.value : '';
+
+    if(!total || total<=0) return alert('Введіть повну суму покупки.');
+    if(!count) return alert('Оберіть кількість платежів.');
+    if(amount>total) return alert('Сума цього платежу не може бути більшою за повну суму покупки.');
+  }
+
+  if(isMono){
+    var productEl=document.getElementById('monoProduct');
+    var orderEl=document.getElementById('monoOrder');
+    product=productEl ? productEl.value.trim() : '';
+    order=orderEl ? orderEl.value.trim() : '';
+
+    if(!product) return alert('Введіть назву товару.');
+    if(!order) return alert('Введіть номер замовлення.');
+  }
+
+  finalShowConfirm({
+    title:title,
+    phone:phone,
+    cardLast4:card.slice(-4),
+    amount:amount,
+    product:product,
+    order:order,
+    total:total,
+    count:count,
+    isInstallment:isInstallment,
+    isMono:isMono,
+    details:[
+      ['Телефон',phone],
+      ['Картка','**** '+card.slice(-4)]
+    ]
+  });
+}
+
+function confirmCustomPayment(){
+  if(!finalPendingPayment) return;
+
+  finalReceipt=finalPendingPayment;
+
+  var text=finalReceipt.title+' — '+Number(finalReceipt.amount).toLocaleString('uk-UA')+' ₴';
+  var operationText=document.getElementById('operationText');
+  if(operationText) operationText.textContent=text;
+
+  finalPendingPayment=null;
+  openPage('operationSuccess');
+}
+
+function cancelPaymentConfirmation(){
+  finalPendingPayment=null;
+  openPage('customPayment');
+}
+
+function showOperationReceipt(){
+  var r=finalReceipt;
+  var body=document.getElementById('operationReceiptBody');
+  if(!body) return;
+
+  var out='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Операція</span><b>'+finalEsc(r.title)+'</b></div>';
+
+  if(r.product)
+    out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Товар</span><b>'+finalEsc(r.product)+'</b></div>';
+
+  if(r.order)
+    out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Замовлення</span><b>№ '+finalEsc(r.order)+'</b></div>';
+
+  if(r.phone)
+    out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Телефон</span><b>'+finalEsc(r.phone)+'</b></div>';
+
+  if(r.cardLast4)
+    out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Картка</span><b>**** '+finalEsc(r.cardLast4)+'</b></div>';
+
+  if(r.total)
+    out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Повна сума</span><b>'+Number(r.total).toLocaleString('uk-UA')+' ₴</b></div>';
+
+  if(r.count)
+    out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Платежів</span><b>'+finalEsc(r.count)+'</b></div>';
+
+  out+='<hr style="border:0;border-top:1px dashed #ccc;margin:16px 0">';
+  out+='<div style="display:flex;justify-content:space-between;font-size:20px;margin:10px 0"><span>Сплачено</span><b>'+Number(r.amount).toLocaleString('uk-UA')+' ₴</b></div>';
+  out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Дата</span><b>'+new Date().toLocaleString('uk-UA')+'</b></div>';
+  out+='<div style="display:flex;justify-content:space-between;margin:10px 0"><span>Термінал</span><b>№ 000128</b></div>';
+
+  body.innerHTML=out;
+
+  var date=document.getElementById('operationReceiptDate');
+  if(date) date.textContent=new Date().toLocaleString('uk-UA');
+
+  openPage('operationReceipt');
+}
+
+/* Use the same confirmation flow for the two requested operations. */
+function openPartPayment(){
+  var title=document.getElementById('customPaymentTitle');
+  var sub=document.getElementById('customPaymentSub');
+  var note=document.getElementById('customPaymentNote');
+  var mono=document.getElementById('monoProductBox');
+  var inst=document.getElementById('installmentTotalBox');
+  if(title) title.textContent='Оплата частинами';
+  if(sub) sub.textContent='Оплата чергового платежу за покупкою';
+  if(note) note.textContent='Введіть повну суму покупки, кількість платежів та суму цього платежу.';
+  if(mono) mono.classList.add('hidden');
+  if(inst) inst.classList.remove('hidden');
+  var amount=document.getElementById('customAmount');
+  if(amount) amount.placeholder='Сума цього платежу, ₴';
+  clearCustomPayment();
+  openPage('customPayment');
+}
+
+function openMonoMarketPayment(){
+  var title=document.getElementById('customPaymentTitle');
+  var sub=document.getElementById('customPaymentSub');
+  var note=document.getElementById('customPaymentNote');
+  var mono=document.getElementById('monoProductBox');
+  var inst=document.getElementById('installmentTotalBox');
+  if(title) title.textContent='Оплатити на Monomarket';
+  if(sub) sub.textContent='Оплата товару або замовлення';
+  if(note) note.textContent='Введіть товар, номер замовлення, телефон, картку та суму.';
+  if(mono) mono.classList.remove('hidden');
+  if(inst) inst.classList.add('hidden');
+  var amount=document.getElementById('customAmount');
+  if(amount) amount.placeholder='Сума товару, ₴';
+  clearCustomPayment();
+  openPage('customPayment');
+}
+</script>
+
+
+<script>
+/* === UNIVERSAL CONFIRMATION + RECEIPT FOR ALL PAYMENT OPERATIONS === */
+var universalPending=null;
+var universalReceipt={title:'Операція',amount:0,details:[]};
+
+function uEsc(v){
+  return String(v==null?'':v).replace(/[&<>"']/g,function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];
+  });
+}
+function uMoney(v){return Number(v||0).toLocaleString('uk-UA')+' ₴';}
+
+function universalConfirm(data){
+  universalPending=data;
+  var op=document.getElementById('confirmOperation');
+  var ph=document.getElementById('confirmPhone');
+  var ca=document.getElementById('confirmCardNumber');
+  var ex=document.getElementById('confirmExtra');
+  var am=document.getElementById('confirmAmount');
+
+  if(op)op.textContent=data.title;
+  if(ph)ph.textContent=data.phone||'—';
+  if(ca)ca.textContent=data.cardLast4?'**** '+data.cardLast4:'—';
+  if(am)am.textContent=uMoney(data.amount);
+
+  if(ex){
+    var s='';
+    (data.extra||[]).forEach(function(x){
+      s+='<div style="display:flex;justify-content:space-between;padding:8px 0;gap:12px"><span>'+uEsc(x[0])+'</span><b>'+uEsc(x[1])+'</b></div>';
+    });
+    ex.innerHTML=s;
+  }
+  openPage('paymentConfirm');
+}
+
+function universalFinish(data){
+  universalReceipt=data;
+  var text=data.title;
+  if(data.amount!=null) text+=': '+uMoney(data.amount);
+  var ot=document.getElementById('operationText');
+  if(ot)ot.textContent=text;
+  openPage('operationSuccess');
+}
+
+function confirmCustomPayment(){
+  if(!universalPending)return;
+  var p=universalPending;
+  universalPending=null;
+
+  /* Transfer gets PIN after the confirmation screen. */
+  if(p.kind==='transfer'){
+    window.universalAfterPin=p;
+    openPage('pin');
+    return;
+  }
+  universalFinish(p);
+}
+
+function cancelPaymentConfirmation(){
+  universalPending=null;
+  openPage('home');
+}
+
+function finishPayment(){
+  var id=document.getElementById('paymentId').value.trim();
+  var amount=Number(document.getElementById('paymentSum').value);
+  if(!id || !amount || amount<=0)return alert('Заповніть усі поля.');
+  var card='';
+  if(paymentMethod==='card'){
+    card=document.getElementById('paymentCard').value.replace(/\s/g,'');
+    if(card.length!==16)return alert('Введіть 16 цифр картки.');
+  }
+  universalConfirm({
+    title:'Оплата: '+currentPayment,
+    amount:amount,
+    phone:'',
+    cardLast4:card.slice(-4),
+    extra:[
+      ['Платіж',''+currentPayment],
+      ['Особовий рахунок / номер',id],
+      ['Спосіб оплати',paymentMethod==='card'?'Картка':'Готівка']
+    ],
+    details:[
+      ['Платіж',currentPayment],
+      ['Номер',id],
+      ['Спосіб оплати',paymentMethod==='card'?'Картка':'Готівка']
+    ],
+    kind:'payment'
+  });
+}
+
+function finishWithdraw(){
+  var el=document.getElementById('withdrawCardInput');
+  var n=el.value.replace(/\s/g,'');
+  if(n.length!==16)return alert('Введіть 16 цифр картки.');
+  universalConfirm({
+    title:'Зняття готівки',
+    amount:withdrawAmount,
+    phone:'',
+    cardLast4:n.slice(-4),
+    extra:[['Сума',uMoney(withdrawAmount)]],
+    details:[['Картка','**** '+n.slice(-4)],['Сума',uMoney(withdrawAmount)]],
+    kind:'withdraw'
+  });
+}
+
+function finishRefund(){
+  var amount=Number(document.getElementById('refundAmount').value);
+  var el=document.getElementById('refundCard');
+  var n=el.value.replace(/\s/g,'');
+  if(!amount || amount<=0)return alert('Введіть суму.');
+  if(n.length!==16)return alert('Введіть 16 цифр картки.');
+  universalConfirm({
+    title:'Повернення коштів',
+    amount:amount,
+    phone:'',
+    cardLast4:n.slice(-4),
+    extra:[['Причина','Повернення коштів']],
+    details:[['Картка','**** '+n.slice(-4)],['Сума',uMoney(amount)]],
+    kind:'refund'
+  });
+}
+
+function finish(){
+  var n=document.getElementById('cardNumber').value.replace(/\s/g,'');
+  if(n.length!==16)return alert('Введіть 16 цифр картки.');
+  var amount=lastOperation==='cashin'?cash:transfer;
+  var cur=lastOperation==='cashin'?cashCurrency:transferCurrency;
+  if(!amount || amount<=0)return alert('Введіть суму.');
+
+  universalConfirm({
+    title:lastOperation==='cashin'?'Поповнення картки':'Переказ коштів',
+    amount:amount,
+    phone:'',
+    cardLast4:n.slice(-4),
+    extra:[
+      ['Валюта',cur],
+      ['Сума',symbols[cur]+' '+amount],
+      ['Картка','**** '+n.slice(-4)]
+    ],
+    details:[
+      ['Картка','**** '+n.slice(-4)],
+      ['Валюта',cur],
+      ['Сума',symbols[cur]+' '+amount]
+    ],
+    kind:lastOperation==='cashin'?'cashin':'transfer',
+    transferCard:n,
+    currency:cur
+  });
+}
+
+function finishPin(){
+  var p=document.getElementById('pinInput').value.replace(/\D/g,'');
+  if(p.length!==4)return alert('Введіть 4 цифри PIN-коду.');
+  if(!window.universalAfterPin)return alert('Операцію не знайдено.');
+
+  var d=window.universalAfterPin;
+  window.universalAfterPin=null;
+  var n=d.transferCard || '';
+  if(n)d.details.push(['Картка','**** '+n.slice(-4)]);
+  universalFinish(d);
+  document.getElementById('pinInput').value='';
+}
+
+function showOperationReceipt(){
+  var r=universalReceipt;
+  var body=document.getElementById('operationReceiptBody');
+  if(!body)return;
+
+  var s='<div style="font-size:18px;font-weight:700;margin-bottom:14px">'+uEsc(r.title)+'</div>';
+  (r.details||[]).forEach(function(x){
+    s+='<div style="display:flex;justify-content:space-between;gap:12px;margin:10px 0"><span>'+uEsc(x[0])+'</span><b>'+uEsc(x[1])+'</b></div>';
+  });
+  s+='<hr style="border:0;border-top:1px dashed #ccc;margin:16px 0">';
+  s+='<div style="display:flex;justify-content:space-between;font-size:20px;margin:10px 0"><span>Сума</span><b>'+uMoney(r.amount)+'</b></div>';
+
+  body.innerHTML=s;
+  var dt=document.getElementById('operationReceiptDate');
+  if(dt)dt.textContent=new Date().toLocaleString('uk-UA');
+  openPage('operationReceipt');
+}
+</script>
+
+
+<script>
+/* ===== REQUESTED OPERATION RULES ===== */
+(function(){
+  function val(id){
+    var e=document.getElementById(id);
+    return e ? e.value.trim() : '';
+  }
+  function num(id){ return Number(val(id)); }
+  function last4(id){
+    return val(id).replace(/\s/g,'').slice(-4);
+  }
+  function confirm(title, amount, details, kind, phone, card4){
+    universalPending={
+      title:title, amount:amount, details:details || [],
+      kind:kind || '', phone:phone || '', cardLast4:card4 || ''
+    };
+    var op=document.getElementById('confirmOperation');
+    var ph=document.getElementById('confirmPhone');
+    var ca=document.getElementById('confirmCardNumber');
+    var am=document.getElementById('confirmAmount');
+    var ex=document.getElementById('confirmExtra');
+    if(op)op.textContent=title;
+    if(ph)ph.textContent=phone || '—';
+    if(ca)ca.textContent=card4 ? '**** '+card4 : '—';
+    if(am)am.textContent=numFmt(amount);
+    if(ex)ex.innerHTML=(details||[]).map(function(x){
+      return '<div style="display:flex;justify-content:space-between;padding:8px 0;gap:10px"><span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>';
+    }).join('');
+    openPage('paymentConfirm');
+  }
+  function numFmt(n){return Number(n||0).toLocaleString('uk-UA')+' ₴';}
+  function esc(s){return String(s||'').replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]});}
+
+  /* Transfer: card OR cash. Cash skips PIN. Card requires PIN. */
+  window.selectTransferMethod=function(method){
+    window.transferPaymentMethod=method;
+    var c=document.getElementById('transferCardBox');
+    if(c)c.style.display=method==='card'?'block':'none';
+    var p=document.getElementById('transferPinHint');
+    if(p)p.textContent=method==='card'?'Після підтвердження буде запитано PIN-код.':'Для готівки PIN-код не потрібен.';
+  };
+
+  window.finishTransfer=function(){
+    var amount=num('transferAmount');
+    if(!amount || amount<=0)return alert('Введіть суму переказу.');
+    var method=window.transferPaymentMethod || 'card';
+    if(method==='cash'){
+      confirm('Переказ коштів — готівка',amount,
+        [['Спосіб оплати','Готівка'],['PIN-код','Не потрібен']],
+        'transfer_cash','','');
+    }else{
+      var n=val('transferCard');
+      if(n.replace(/\s/g,'').length!==16)return alert('Введіть 16 цифр картки.');
+      confirm('Переказ коштів — картка',amount,
+        [['Спосіб оплати','Картка'],['Картка','**** '+n.replace(/\s/g,'').slice(-4)],['PIN','Потрібен']],
+        'transfer_card','',n.replace(/\s/g,'').slice(-4));
+    }
+  };
+
+  /* Cash-in: PIN is required. */
+  window.finishCashIn=function(){
+    var amount=num('cashInAmount');
+    var n=val('cashInCard').replace(/\s/g,'');
+    if(!amount || amount<=0)return alert('Введіть суму.');
+    if(n.length!==16)return alert('Введіть 16 цифр картки.');
+    confirm('Зарахування коштів',amount,
+      [['Картка','**** '+n.slice(-4)],['PIN','Потрібен']],
+      'cashin','',n.slice(-4));
+  };
+
+  /* Withdrawal: PIN required. */
+  window.finishWithdrawal=function(){
+    var amount=num('withdrawAmount');
+    var n=val('withdrawCard').replace(/\s/g,'');
+    if(!amount || amount<=0)return alert('Введіть суму.');
+    if(n.length!==16)return alert('Введіть 16 цифр картки.');
+    confirm('Зняття готівки',amount,
+      [['Картка','**** '+n.slice(-4)],['PIN','Потрібен']],
+      'withdraw','',n.slice(-4));
+  };
+
+  /* Installments: PIN required. */
+  window.finishInstallment=function(){
+    var total=num('installmentTotal');
+    var amount=num('installmentAmount');
+    var count=val('installmentCount');
+    var n=val('installmentCard').replace(/\s/g,'');
+    if(!total || !amount || !count)return alert('Заповніть усі поля.');
+    if(amount>total)return alert('Платіж не може бути більшим за повну суму.');
+    if(n.length!==16)return alert('Введіть 16 цифр картки.');
+    confirm('Оплата частинами',amount,
+      [['Повна сума',numFmt(total)],['Кількість платежів',count],['Картка','**** '+n.slice(-4)],['PIN','Потрібен']],
+      'installment','',n.slice(-4));
+  };
+
+  /* Monomarket: PIN required. */
+  window.finishMonomarket=function(){
+    var product=val('monoProduct');
+    var order=val('monoOrder');
+    var amount=num('monoAmount');
+    var phone=val('monoPhone');
+    var n=val('monoCard').replace(/\s/g,'');
+    if(!product || !order || !amount || !phone)return alert('Заповніть усі поля.');
+    if(n.length!==16)return alert('Введіть 16 цифр картки.');
+    confirm('Оплата на Monomarket',amount,
+      [['Товар',product],['Замовлення','№ '+order],['Телефон',phone],['Картка','**** '+n.slice(-4)],['PIN','Потрібен']],
+      'monomarket',phone,n.slice(-4));
+  };
+
+  /* Utilities / mobile: add full name to confirmation. */
+  window.finishUtilityWithName=function(title, amount, phone, card, fullName, extra){
+    var n=(card||'').replace(/\s/g,'');
+    if(!fullName.trim())return alert('Напишіть своє ім’я, прізвище та по батькові.');
+    if(!phone.trim())return alert('Введіть номер телефону.');
+    if(n.length!==16)return alert('Введіть 16 цифр картки.');
+    var details=[['ПІБ',fullName],['Телефон',phone],['Картка','**** '+n.slice(-4)]];
+    if(extra)details=details.concat(extra);
+    confirm(title,amount,details,'named_payment',phone,n.slice(-4));
+  };
+
+  /* Remove/disable refund operation from menus if it exists. */
+  document.querySelectorAll('[onclick*="refund"], [onclick*="Refund"], [onclick*="Повернення"]').forEach(function(e){
+    if(e.closest('section#home') || e.closest('section')) e.style.display='none';
+  });
+
+  /* PIN-required operation types: after confirmation, show PIN. Cash transfer does not. */
+  var oldConfirm=window.confirmCustomPayment;
+  window.confirmCustomPayment=function(){
+    if(!universalPending)return;
+    var p=universalPending;
+    universalPending=null;
+    if(['cashin','withdraw','installment','monomarket','transfer_card'].indexOf(p.kind)>=0){
+      window.universalAfterPin=p;
+      openPage('pin');
+      return;
+    }
+    universalFinish(p);
+  };
+
+  /* PIN success should then finish the pending operation. */
+  window.finishPin=function(){
+    var pin=(document.getElementById('pinInput')||{}).value||'';
+    pin=pin.replace(/\D/g,'');
+    if(pin.length!==4)return alert('Введіть 4 цифри PIN-коду.');
+    if(!window.universalAfterPin)return alert('Операцію не знайдено.');
+    var p=window.universalAfterPin;
+    window.universalAfterPin=null;
+    universalFinish(p);
+    var el=document.getElementById('pinInput'); if(el)el.value='';
+  };
+})();
+</script>
+
+
+<script>
+/* ===== FINAL REQUESTED BEHAVIOR ===== */
+(function(){
+
+  function esc(v){
+    return String(v==null?'':v).replace(/[&<>"']/g,function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];
+    });
+  }
+  function money(v){ return Number(v||0).toLocaleString('uk-UA')+' ₴'; }
+
+  window.requestConfirm = function(data){
+    window.requestedPending = data;
+
+    var op=document.getElementById('confirmOperation');
+    var ph=document.getElementById('confirmPhone');
+    var ca=document.getElementById('confirmCardNumber');
+    var am=document.getElementById('confirmAmount');
+    var ex=document.getElementById('confirmExtra');
+
+    if(op) op.textContent=data.title || 'Операція';
+    if(ph) ph.textContent=data.phone || '—';
+    if(ca) ca.textContent=data.cardLast4 ? '**** '+data.cardLast4 : (data.method==='cash'?'Готівка':'—');
+    if(am) am.textContent=money(data.amount);
+
+    if(ex){
+      ex.innerHTML=(data.extra||[]).map(function(x){
+        return '<div style="display:flex;justify-content:space-between;gap:12px;padding:8px 0">'+
+               '<span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>';
+      }).join('');
+    }
+    openPage('paymentConfirm');
+  };
+
+  /* Transfer: cash or card. Cash has NO PIN. Card HAS PIN. */
+  window.chooseTransferMethod = function(method){
+    window.transferMethod = method;
+    var hint=document.getElementById('transferMethodHint');
+    if(hint) hint.textContent = method==='cash'
+      ? 'Готівкою — PIN-код не потрібен.'
+      : 'Карткою — після підтвердження потрібен PIN-код.';
+
+    /* Read the amount that the user actually entered on the transfer screen. */
+    var amountEl = document.getElementById('transferAmount') ||
+                    document.getElementById('transferSum') ||
+                    document.querySelector('#transfer input[type="number"]');
+    var amount = 0;
+    if(amountEl){
+      if(typeof amountEl.value !== 'undefined' && amountEl.value !== ''){
+        amount = Number(amountEl.value);
+      }else{
+        /* transferAmount is a display <div>, e.g. "500 ₴" */
+        var shown = (amountEl.textContent || '').replace(/[^0-9.,-]/g,'').replace(',','.');
+        amount = Number(shown);
+      }
+    }
+    if(!amount) amount = Number(window.transferAmountValue || window.transfer || 0);
+
+    if(!amount || amount<=0){
+      alert('Спочатку введіть суму переказу.');
+      return;
+    }
+
+    window.transferAmountValue = amount;
+
+    if(method==='cash'){
+      requestConfirm({
+        title:'Переказ коштів — готівка',
+        amount:amount,
+        method:'cash',
+        extra:[
+          ['Сума',money(amount)],
+          ['Спосіб оплати','Готівка'],
+          ['PIN-код','Не потрібен']
+        ],
+        kind:'transfer_cash'
+      });
+    }else{
+      window.lastOperation='transfer';
+      openPage('card');
+    }
+  };
+
+  /* Cash-in: card -> confirmation -> PIN -> success. */
+  window.finish = function(){
+    var n=(document.getElementById('cardNumber').value||'').replace(/\s/g,'');
+    if(n.length!==16) return alert('Введіть 16 цифр картки.');
+
+    var amount = window.lastOperation==='cashin' ? Number(window.cash||0) : Number(window.transferAmountValue || window.transfer || 0);
+    var cur = window.lastOperation==='cashin' ? window.cashCurrency : window.transferCurrency;
+
+    requestConfirm({
+      title:window.lastOperation==='cashin'?'Зарахування коштів':'Переказ коштів — картка',
+      amount:amount,
+      cardLast4:n.slice(-4),
+      extra:[
+        ['Картка','**** '+n.slice(-4)],
+        ['Валюта',cur],
+        ['PIN-код','Потрібен']
+      ],
+      kind:window.lastOperation==='cashin'?'cashin':'transfer_card'
+    });
+  };
+
+  /* Withdrawal: confirmation -> PIN. */
+  window.finishWithdraw = function(){
+    var n=(document.getElementById('withdrawCardInput').value||'').replace(/\s/g,'');
+    if(n.length!==16) return alert('Введіть 16 цифр картки.');
+
+    requestConfirm({
+      title:'Зняття готівки',
+      amount:Number(window.withdrawAmount||0),
+      cardLast4:n.slice(-4),
+      extra:[
+        ['Картка','**** '+n.slice(-4)],
+        ['PIN-код','Потрібен']
+      ],
+      kind:'withdraw'
+    });
+  };
+
+  /* Utilities/mobile: full name + existing ID/phone + amount. */
+  window.finishPayment = function(){
+    var fullName=(document.getElementById('paymentFullName')||{}).value||'';
+    var id=(document.getElementById('paymentId')||{}).value||'';
+    var amount=Number((document.getElementById('paymentSum')||{}).value||0);
+
+    if(!fullName.trim()) return alert('Напишіть своє ім’я, прізвище та по батькові.');
+    if(!id.trim()) return alert(currentPayment==='Мобільний телефон'?'Введіть номер телефону.':'Введіть особовий рахунок.');
+    if(!amount || amount<=0) return alert('Введіть правильну суму.');
+
+    var card4='';
+    if(paymentMethod==='card'){
+      var n=(document.getElementById('paymentCard')||{}).value||'';
+      n=n.replace(/\s/g,'');
+      if(n.length!==16) return alert('Введіть 16 цифр картки.');
+      card4=n.slice(-4);
+    }
+
+    requestConfirm({
+      title:currentPayment,
+      amount:amount,
+      phone:currentPayment==='Мобільний телефон'?id:'',
+      cardLast4:card4,
+      method:paymentMethod,
+      extra:[
+        ['ПІБ',fullName.trim()],
+        [currentPayment==='Мобільний телефон'?'Номер телефону':'Особовий рахунок',id.trim()],
+        ['Спосіб оплати',paymentMethod==='card'?'Картка':'Готівка']
+      ],
+      kind:'utility'
+    });
+  };
+
+  /* Installments and Monomarket: confirmation -> PIN. */
+  window.finishCustomPayment = function(){
+    var phone=document.getElementById('customPhone').value.trim();
+    var card=document.getElementById('customCard').value.replace(/\s/g,'');
+    var amount=Number(document.getElementById('customAmount').value);
+    var title=document.getElementById('customPaymentTitle').textContent;
+    var installment=title==='Оплата частинами';
+    var mono=title==='Оплатити на Monomarket';
+
+    if(!phone) return alert('Введіть номер телефону.');
+    if(!amount || amount<=0) return alert('Введіть правильну суму.');
+    if(card.length!==16) return alert('Введіть 16 цифр картки.');
+
+    var extra=[];
+    if(installment){
+      var total=Number(document.getElementById('installmentTotal').value);
+      var count=document.getElementById('installmentCount').value;
+      if(!total || total<=0) return alert('Введіть повну суму покупки.');
+      if(amount>total) return alert('Сума платежу не може бути більшою за повну суму.');
+      extra=[
+        ['Повна сума',money(total)],
+        ['Кількість платежів',count],
+        ['PIN-код','Потрібен']
+      ];
+    }
+    if(mono){
+      var product=document.getElementById('monoProduct').value.trim();
+      var order=document.getElementById('monoOrder').value.trim();
+      if(!product) return alert('Введіть назву товару.');
+      if(!order) return alert('Введіть номер замовлення.');
+      extra=[
+        ['Товар',product],
+        ['Замовлення','№ '+order],
+        ['PIN-код','Потрібен']
+      ];
+    }
+
+    extra.unshift(['Телефон',phone],['Картка','**** '+card.slice(-4)]);
+
+    requestConfirm({
+      title:title,
+      amount:amount,
+      phone:phone,
+      cardLast4:card.slice(-4),
+      extra:extra,
+      kind:installment?'installment':'monomarket'
+    });
+  };
+
+  /* Confirmation: PIN only for requested card operations. */
+  window.confirmCustomPayment = function(){
+    var p=window.requestedPending;
+    if(!p) return;
+
+    window.requestedPending=null;
+
+    if(['cashin','transfer_card','withdraw','installment','monomarket'].indexOf(p.kind)>=0){
+      window.pinPending=p;
+      openPage('pin');
+    }else{
+      window.finishRequestedOperation(p);
+    }
+  };
+
+  window.cancelPaymentConfirmation=function(){
+    window.requestedPending=null;
+    openPage('home');
+  };
+
+  /* PIN completion. */
+  window.finishPin=function(){
+    var pin=(document.getElementById('pinInput').value||'').replace(/\D/g,'');
+    if(pin.length!==4) return alert('Введіть 4 цифри PIN-коду.');
+    if(!window.pinPending) return alert('Операцію не знайдено.');
+
+    var p=window.pinPending;
+    window.pinPending=null;
+    document.getElementById('pinInput').value='';
+    window.finishRequestedOperation(p);
+  };
+
+  window.finishRequestedOperation=function(p){
+    window.requestedReceipt=p;
+    var t=document.getElementById('operationText');
+    if(t) t.textContent=p.title+' — '+money(p.amount);
+    openPage('operationSuccess');
+  };
+
+  /* Cash transfer does not need PIN and is completed after confirmation. */
+  var originalConfirm=window.confirmCustomPayment;
+  window.confirmCashTransfer=function(){
+    var p=window.requestedPending;
+    if(!p) return;
+    window.requestedPending=null;
+    window.finishRequestedOperation(p);
+  };
+
+  /* Receipt for every operation completed through the new flow. */
+  window.showOperationReceipt=function(){
+    var p=window.requestedReceipt;
+    if(!p) p={title:'Операція',amount:0,extra:[]};
+
+    var body=document.getElementById('operationReceiptBody');
+    if(!body)return;
+
+    var s='<div style="font-size:19px;font-weight:800;margin-bottom:14px">'+esc(p.title)+'</div>';
+    (p.extra||[]).forEach(function(x){
+      s+='<div style="display:flex;justify-content:space-between;gap:12px;margin:10px 0">'+
+         '<span>'+esc(x[0])+'</span><b>'+esc(x[1])+'</b></div>';
+    });
+    s+='<hr style="border:0;border-top:1px dashed #ccc;margin:16px 0">';
+    s+='<div style="display:flex;justify-content:space-between;font-size:20px">'+
+       '<span>Сума</span><b>'+money(p.amount)+'</b></div>';
+    s+='<div style="display:flex;justify-content:space-between;margin-top:10px">'+
+       '<span>Дата</span><b>'+new Date().toLocaleString('uk-UA')+'</b></div>';
+    s+='<div style="display:flex;justify-content:space-between;margin-top:10px">'+
+       '<span>Термінал</span><b>№ 000128</b></div>';
+
+    body.innerHTML=s;
+    var d=document.getElementById('operationReceiptDate');
+    if(d)d.textContent=new Date().toLocaleString('uk-UA');
+    openPage('operationReceipt');
+  };
+
+  /* Remove the refund section/button visually as an extra safeguard. */
+  document.querySelectorAll('[onclick*="refund"], [onclick*="Refund"], [onclick*="Повер"]').forEach(function(el){
+    el.style.display='none';
+  });
+})();
+</script>
+
+</body></html>
